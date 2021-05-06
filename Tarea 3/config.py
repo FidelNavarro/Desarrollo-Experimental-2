@@ -303,8 +303,8 @@ def movimiento3d(x, y, z, N, nStep, L, rCut, drMax, iRatio, iPrint, cc, V, iTraz
     xTraza = np.zeros(nStep)
     yTraza = np.zeros(nStep)
     zTraza = np.zeros(nStep)
-    vTraza = np.zeros(nStep+1)
-    vTraza[0] = V
+    vTraza = np.zeros(nStep)
+    #vTraza[0] = V
     #Vn = np.zeros(nStep+1)
     #Vn[0] = V
 
@@ -363,7 +363,7 @@ def movimiento3d(x, y, z, N, nStep, L, rCut, drMax, iRatio, iPrint, cc, V, iTraz
 
         if i % iPrint == 0:
             print (i, ratio, drMax, Vn,"\n")
-        vTraza[i+1] = Vn
+        vTraza[i] = Vn
 
     return x, y, z, xTraza, yTraza, zTraza, vTraza
 
