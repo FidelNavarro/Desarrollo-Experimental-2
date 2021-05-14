@@ -357,7 +357,7 @@ def wdt3(Cxr, Cyr, Czr, N, ki2, dT, iFrec):
                 wtz = wtz + ( Czr[j][h+i] - Czr[j][h] )**2
                 
         time[i] = tim*float(i+1)
-        wt[i] = (wtx + wty + wtz)/float(ntmax)
+        wt[i] = (wtx + wty + wtz)/float(N)/float(ntmax)/6.0
         dif[i] = wt[i]/time[i]
     
     return time, wt, dif
