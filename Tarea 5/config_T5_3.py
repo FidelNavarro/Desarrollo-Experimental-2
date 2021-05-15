@@ -162,9 +162,19 @@ def movimientoYukawa(x,y,z,fx,fy,fz,L,N,rCut,nStep,dT,nener,iFrec1, iFrec2):
     Cyr = np.zeros((N,nStep))
     Czr = np.zeros((N,nStep))
     
-    xr = x#np.zeros(N)
-    yr = z#np.zeros(N)
-    zr = z#np.zeros(N)
+    xr = x #np.zeros(N)
+    yr = y #np.zeros(N)
+    zr = z #np.zeros(N)
+    
+    Cxr2 = np.zeros((N,nStep))
+    Cyr2 = np.zeros((N,nStep))
+    Czr2 = np.zeros((N,nStep))
+    
+    xr2 = np.zeros(N)
+    yr2 = np.zeros(N)
+    zr2 = np.zeros(N)
+    
+    
     
     for l in range(nStep):
         for i in range(N):
@@ -184,6 +194,10 @@ def movimientoYukawa(x,y,z,fx,fy,fz,L,N,rCut,nStep,dT,nener,iFrec1, iFrec2):
             yr[i] = yr[i] + fy[i]*dT + var*yRandom
             zr[i] = zr[i] + fz[i]*dT + var*zRandom
             
+            xr2[i] = xr2[i] + fx[i]*dT + var*xRandom
+            yr2[i] = yr2[i] + fy[i]*dT + var*yRandom
+            zr2[i] = zr2[i] + fz[i]*dT + var*zRandom
+            
             if l>nener and l%iFrec1==0.0 : 
             #for i in range(N):
                 Cx[i][k1] = x[i]
@@ -197,6 +211,10 @@ def movimientoYukawa(x,y,z,fx,fy,fz,L,N,rCut,nStep,dT,nener,iFrec1, iFrec2):
                 Cxr[i][k2] = xr[i]
                 Cyr[i][k2] = yr[i]
                 Czr[i][k2] = zr[i]
+                
+                Cxr2[i][k2] = xr2[i]
+                Cyr2[i][k2] = yr2[i]
+                Czr2[i][k2] = zr2[i]
             
         if l>nener and l%iFrec1==0.0 :
             k1 = k1 + 1
@@ -210,7 +228,7 @@ def movimientoYukawa(x,y,z,fx,fy,fz,L,N,rCut,nStep,dT,nener,iFrec1, iFrec2):
                 
         V[l] = E
     
-    return x,y,z,Cx,Cy,Cz,Cxr,Cyr,Czr,V,k1,k2
+    return x,y,z,Cx,Cy,Cz,Cxr,Cyr,Czr,Cxr2,Cyr2,Czr2,V,k1,k2
 
 
 
@@ -285,31 +303,6 @@ def pote(rt, gdr, n):
     
     print("rho = ", n, ", Phs = ", phs)
     
-
-@njit
-def wdt(Cx, Cy, Cz, N, ki, dT, iFrec):
-    tim = dT*float(iFrec)
-    
-    dif = np.zeros(ki)
-    time = np.zeros(ki)
-    Wt = np.zeros(ki)
-    
-    for k in range(1,ki):
-        #ntmax = ki-k
-        R = 0
-    
-        for i in range(N):
-            #for j in range(k):
-            
-            r0 = ( ( Cx[i][k-1] )**2 + ( Cy[i][0] )**2 + ( Cz[i][k-1] )**2 )**0.5
-            r = ( ( Cx[i][k] )**2 + ( Cy[i][k] )**2 + ( Cz[i][k] )**2 )**0.5
-            R = (r - r0)**2 + R
-        
-        time[k] = tim*float(k)
-        Wt[k] = (R)/float(N)#/6.0
-        dif[k] = Wt[k]/time[k]
-    
-    return time, Wt, dif
 
 @njit
 def wdt2(Cx,Cy,Cz,N,ki,dT,iFrec):
@@ -433,9 +426,17 @@ def movimientoGauss(x,y,z,fx,fy,fz,L,N,rCut,nStep,dT,nener,iFrec1, iFrec2, n):
     Cyr = np.zeros((N,nStep))
     Czr = np.zeros((N,nStep))
     
-    xr = x#np.zeros(N)
-    yr = z#np.zeros(N)
-    zr = z#np.zeros(N)
+    xr = x #np.zeros(N)
+    yr = y #np.zeros(N)
+    zr = z #np.zeros(N)
+    
+    Cxr2 = np.zeros((N,nStep))
+    Cyr2 = np.zeros((N,nStep))
+    Czr2 = np.zeros((N,nStep))
+    
+    xr2 = np.zeros(N)
+    yr2 = np.zeros(N)
+    zr2 = np.zeros(N)
     
     for l in range(nStep):
         for i in range(N):
@@ -455,6 +456,10 @@ def movimientoGauss(x,y,z,fx,fy,fz,L,N,rCut,nStep,dT,nener,iFrec1, iFrec2, n):
             yr[i] = yr[i] + fy[i]*dT + var*yRandom
             zr[i] = zr[i] + fz[i]*dT + var*zRandom
             
+            xr2[i] = xr2[i] + fx[i]*dT + var*xRandom
+            yr2[i] = yr2[i] + fy[i]*dT + var*yRandom
+            zr2[i] = zr2[i] + fz[i]*dT + var*zRandom
+            
             if l>nener and l%iFrec1==0.0 : 
             #for i in range(N):
                 Cx[i][k1] = x[i]
@@ -468,6 +473,10 @@ def movimientoGauss(x,y,z,fx,fy,fz,L,N,rCut,nStep,dT,nener,iFrec1, iFrec2, n):
                 Cxr[i][k2] = xr[i]
                 Cyr[i][k2] = yr[i]
                 Czr[i][k2] = zr[i]
+                
+                Cxr2[i][k2] = xr2[i]
+                Cyr2[i][k2] = yr2[i]
+                Czr2[i][k2] = zr2[i]
             
         if l>nener and l%iFrec1==0.0 :
             k1 = k1 + 1
@@ -481,7 +490,7 @@ def movimientoGauss(x,y,z,fx,fy,fz,L,N,rCut,nStep,dT,nener,iFrec1, iFrec2, n):
                 
         V[l] = E
     
-    return x,y,z,Cx,Cy,Cz,Cxr,Cyr,Czr,V,k1,k2
+    return x,y,z,Cx,Cy,Cz,Cxr,Cyr,Czr,Cxr2,Cyr2,Czr2,V,k1,k2
 
 
 
