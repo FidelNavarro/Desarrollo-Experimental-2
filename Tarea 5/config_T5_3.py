@@ -1,4 +1,6 @@
 #En este documento se crearan todas las funciones a utilizar en el programa principal
+#Este programa simula un sistema de discos/esferas 
+#duras monodispersas con unidades reducidas Sigma-Beta.
 import numpy as np
 import random as rd
 from numba import njit
